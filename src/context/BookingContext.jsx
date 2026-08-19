@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { initialResources } from "../data/mockData";
+import { initialResources } from "../Data/mockData";
 
 
 const BookingContext = createContext(null);
