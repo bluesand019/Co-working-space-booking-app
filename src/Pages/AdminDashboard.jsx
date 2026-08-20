@@ -1,4 +1,5 @@
 import { useBooking } from "../context/BookingContext";
+import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const { bookings, resources } = useBooking();
@@ -9,11 +10,14 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h2>Admin Dashboard — All Bookings</h2>
+      <h2>Admin Dashboard</h2>
       {bookings.length === 0 ? (
-        <p>No bookings have been made yet.</p>
+        <div className="empty-state">
+          <p>No bookings yet</p>
+          <p>Bookings will show up here once members start reserving spaces.</p>
+        </div>
       ) : (
-        <table border="1" cellPadding="6">
+        <table className="admin-table">
           <thead>
             <tr>
               <th>Resource</th>
@@ -30,7 +34,7 @@ export default function AdminDashboard() {
                 <td>{b.userName}</td>
                 <td>{b.date}</td>
                 <td>{b.startTime}–{b.endTime}</td>
-                <td>{b.status}</td>
+                <td><span className={`pill pill-${b.status}`}>{b.status}</span></td>
               </tr>
             ))}
           </tbody>
