@@ -9,7 +9,11 @@ export default function Login() {
   const [role, setRole] = useState("member");
 
   if (currentUser) {
-    return <p>You're already logged in as {currentUser.name} ({currentUser.role}).</p>;
+    return (
+      <div className="card">
+        <p>You're already logged in as {currentUser.name} ({currentUser.role}).</p>
+      </div>
+    );
   }
 
   function handleSubmit(e) {
@@ -20,21 +24,21 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <div className="card" style={{ maxWidth: 360 }}>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name: </label>
-          <input value={name} onChange={(e) => setName(e.target.value)} />
+        <div className="form-group">
+          <label>Name</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
         </div>
-        <div>
-          <label>Role: </label>
+        <div className="form-group">
+          <label>Role</label>
           <select value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="member">Member</option>
             <option value="admin">Admin</option>
           </select>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="btn">Login</button>
       </form>
     </div>
   );
