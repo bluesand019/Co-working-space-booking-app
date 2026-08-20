@@ -8,7 +8,7 @@ function App() {
   return (
     <BookingProvider>
       <div>
-        <h1>Co-working Space Booking (Prototype - Cycle 1)</h1>
+        <h1>Co-working Space Booking (Prototype 1)</h1>
         <Login />
         <hr />
         <BrowseSpaces />
