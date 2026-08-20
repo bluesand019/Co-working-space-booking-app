@@ -1,13 +1,37 @@
-import { createContext, useContext, useState } from "react";
-import { initialResources } from "../Data/mockData";
-
+import { createContext, useContext, useState, useEffect } from "react";
+import { initialResources } from "../data/mockData";
 
 const BookingContext = createContext(null);
 
+function loadFromStorage(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export function BookingProvider({ children }) {
-  const [resources] = useState(initialResources);
-  const [bookings, setBookings] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null); // { name, role }
+  const [resources, setResources] = useState(() =>
+    loadFromStorage("cw_resources", initialResources)
+  );
+  const [bookings, setBookings] = useState(() => loadFromStorage("cw_bookings", []));
+  const [currentUser, setCurrentUser] = useState(() =>
+    loadFromStorage("cw_currentUser", null)
+  );
+
+  useEffect(() => {
+    localStorage.setItem("cw_resources", JSON.stringify(resources));
+  }, [resources]);
+
+  useEffect(() => {
+    localStorage.setItem("cw_bookings", JSON.stringify(bookings));
+  }, [bookings]);
+
+  useEffect(() => {
+    localStorage.setItem("cw_currentUser", JSON.stringify(currentUser));
+  }, [currentUser]);
 
   function login(name, role) {
     setCurrentUser({ name, role });
@@ -56,6 +80,30 @@ export function BookingProvider({ children }) {
     );
   }
 
+
+  function addResource(resource) {
+    const newResource = { id: `r${Date.now()}`, ...resource };
+    setResources((prev) => [...prev, newResource]);
+  }
+
+  function updateResource(id, changes) {
+    setResources((prev) => prev.map((r) => (r.id === id ? { ...r, ...changes } : r)));
+  }
+
+  function deleteResource(id) {
+    const hasActiveBookings = bookings.some(
+      (b) => b.resourceId === id && b.status === "confirmed"
+    );
+    if (hasActiveBookings) {
+      return {
+        success: false,
+        message: "Cannot delete: this resource has active bookings.",
+      };
+    }
+    setResources((prev) => prev.filter((r) => r.id !== id));
+    return { success: true };
+  }
+
   const value = {
     resources,
     bookings,
@@ -64,6 +112,9 @@ export function BookingProvider({ children }) {
     logout,
     addBooking,
     cancelBooking,
+    addResource,
+    updateResource,
+    deleteResource,
   };
 
   return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;
