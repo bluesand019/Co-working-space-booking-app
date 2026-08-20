@@ -1,6 +1,5 @@
 import { useBooking } from "../context/BookingContext";
 
-// Cycle 2: new page. Lists the logged-in user's bookings, lets them cancel.
 export default function MyBookings() {
   const { bookings, resources, currentUser, cancelBooking } = useBooking();
 
@@ -14,19 +13,29 @@ export default function MyBookings() {
     <div>
       <h2>My Bookings</h2>
       {myBookings.length === 0 ? (
-        <p>You have no bookings yet.</p>
+        <div className="empty-state">
+          <p>No bookings yet</p>
+          <p>Head to Book a Space to reserve your first slot.</p>
+        </div>
       ) : (
-        <ul>
+        <div>
           {myBookings.map((b) => (
-            <li key={b.id}>
-              {resourceName(b.resourceId)} — {b.date} {b.startTime}–{b.endTime} —{" "}
-              <strong>{b.status}</strong>
-              {b.status === "confirmed" && (
-                <button onClick={() => cancelBooking(b.id)}>Cancel</button>
-              )}
-            </li>
+            <div className="card" key={b.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <strong>{resourceName(b.resourceId)}</strong>
+                <div style={{ color: "var(--ink-light)", fontSize: "0.88rem" }}>
+                  {b.date} · {b.startTime}–{b.endTime}
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span className={`pill pill-${b.status}`}>{b.status}</span>
+                {b.status === "confirmed" && (
+                  <button className="btn-danger" onClick={() => cancelBooking(b.id)}>Cancel</button>
+                )}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

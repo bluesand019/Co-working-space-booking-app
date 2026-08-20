@@ -21,7 +21,7 @@ export default function BookSpace() {
 
     const result = addBooking(resourceId, date, startTime, endTime);
     if (result.success) {
-      setSuccess("Booking confirmed!");
+      setSuccess("Booking confirmed.");
       setDate("");
       setStartTime("");
       setEndTime("");
@@ -33,49 +33,55 @@ export default function BookSpace() {
   return (
     <div>
       <h2>Book a Space</h2>
-      {!currentUser && <p style={{ color: "red" }}>Please login first.</p>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Resource: </label>
-          <select value={resourceId} onChange={(e) => setResourceId(e.target.value)}>
-            {resources.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>Date: </label>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-        </div>
-        <div>
-          <label>Start Time: </label>
-          <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-        </div>
-        <div>
-          <label>End Time: </label>
-          <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-        </div>
-        <button type="submit" disabled={!currentUser}>Book</button>
-      </form>
+      <div className="card" style={{ maxWidth: 420 }}>
+        {!currentUser && <div className="alert alert-error">Please log in first.</div>}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Resource</label>
+            <select value={resourceId} onChange={(e) => setResourceId(e.target.value)}>
+              {resources.map((r) => (
+                <option key={r.id} value={r.id}>{r.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Date</label>
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>Start Time</label>
+            <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>End Time</label>
+            <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+          </div>
+          <button type="submit" className="btn" disabled={!currentUser}>Book</button>
+        </form>
+
+        {error && <div className="alert alert-error">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
+      </div>
 
       <h3>Existing bookings for this resource</h3>
       {existingForResource.length === 0 ? (
-        <p>No bookings yet for this resource.</p>
+        <div className="empty-state">
+          <p>Nothing booked yet</p>
+          <p>This resource is wide open.</p>
+        </div>
       ) : (
         <ul>
           {existingForResource.map((b) => (
-            <li key={b.id}>
-              {b.date}: {b.startTime}–{b.endTime}
-            </li>
+            <li key={b.id}>{b.date}: {b.startTime}–{b.endTime}</li>
           ))}
         </ul>
       )}
     </div>
   );
 }
+
+
+
+
