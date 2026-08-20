@@ -16,7 +16,7 @@ function App() {
   return (
     <BookingProvider>
       <BrowserRouter>
-        <h1>Co-working Space Booking (Prototype - Cycle 2)</h1>
+        <h1>Co-working Space Booking (Prototype 2)</h1>
         <Navbar />
         <hr />
         <Routes>
