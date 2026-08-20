@@ -8,53 +8,55 @@ import BookSpace from "./pages/BookSpace";
 import MyBookings from "./pages/MyBookings";
 import AdminDashboard from "./pages/AdminDashboard";
 import ManageResources from "./pages/ManageResources";
+import "./App.css";
 
-// Cycle 2: real routing + navbar + role-protected pages.
-// This file is the integration point for all 3 branches —
-// merge here last, after auth, booking-flow, and admin-dashboard land.
 function App() {
   return (
     <BookingProvider>
       <BrowserRouter>
-        <h1>Co-working Space Booking (Prototype 2)</h1>
+        <header className="app-header">
+          <h1>Co-working Space Booking</h1>
+          <div className="subtitle">Reserve desks, offices, and meeting rooms</div>
+        </header>
         <Navbar />
-        <hr />
-        <Routes>
-          <Route path="/" element={<BrowseSpaces />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/book"
-            element={
-              <ProtectedRoute requiredRole="member">
-                <BookSpace />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/my-bookings"
-            element={
-              <ProtectedRoute requiredRole="member">
-                <MyBookings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/resources"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <ManageResources />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<BrowseSpaces />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/book"
+              element={
+                <ProtectedRoute requiredRole="member">
+                  <BookSpace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-bookings"
+              element={
+                <ProtectedRoute requiredRole="member">
+                  <MyBookings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/resources"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <ManageResources />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
       </BrowserRouter>
     </BookingProvider>
   );
